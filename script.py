@@ -1,4 +1,5 @@
-import requests,os,subprocess
+import requests,os,subprocess,io
+from pypdf import PdfReader
 os.makedirs('out/text',exist_ok=True)
 # selected reports URLs
 basew='https://democracy.wandsworth.gov.uk/'
@@ -32,6 +33,6 @@ for n,u in urls.items():
  try:
   r=s.get(u,timeout=45); print(n,r.status_code,len(r.content),r.url)
   open('/tmp/x.pdf','wb').write(r.content)
-  subprocess.run(['pdftotext','-layout','/tmp/x.pdf',f'out/text/{n}.txt'],timeout=30)
+  pdf=PdfReader(io.BytesIO(r.content)); open(f'out/text/{n}.txt','w').write('\n\n'.join((p.extract_text() or '') for p in pdf.pages))
   open(f'out/text/{n}.url','w').write(r.url)
  except Exception as e: open(f'out/text/{n}.err','w').write(str(e)); print(n,e)
