@@ -1,13 +1,14 @@
 import requests,os
-from urllib.parse import urlencode
-os.makedirs('out',exist_ok=True)
-hosts=['https://democracy.wandsworth.gov.uk','https://moderngov.lambeth.gov.uk','http://moderngov.lambeth.gov.uk','https://moderngov.southwark.gov.uk','http://moderngov.southwark.gov.uk','https://www.southwark.gov.uk']
-paths=['/mgCalendarMonthView.aspx?GL=1&bcr=1&M=1&Y=2026','/mgCalendarMonthView.aspx?GL=1&bcr=1&curmonth=2026-01-01','/mgCalendarMonthView.aspx?GL=1&bcr=1&ctl00_MainContent_month=2026-01-01','/mgCalendarAgendaView.aspx?XXR=0&M=1&DD=2026&CID=0','/mgCalendarWeekView.aspx?CI=0&DD=2026-01-26','/mgCalendarMonthView.aspx?CID=0&year=2026&month=1','/mgCalendarMonthView.aspx?M=1&DD=2026&CID=0','/','/robots.txt']
+os.makedirs('out/pages',exist_ok=True)
 s=requests.Session()
-for hi,h in enumerate(hosts):
- for pi,p in enumerate(paths):
-  try:
-   r=s.get(h+p,timeout=8)
-   fn=f'out/{hi}_{pi}.txt';open(fn,'wb').write((f'URL={r.url}\nSTATUS={r.status_code}\n'.encode()+r.content))
-   print(fn,r.status_code,len(r.content),r.url)
-  except Exception as e: open(f'out/{hi}_{pi}.txt','w').write(str(e));print(e)
+urls={}
+# meeting ids
+for mid,cid in [(10266,792),(10010,305),(10115,511),(9927,763),(10385,320)]: urls[f'w_{mid}']=f'https://democracy.wandsworth.gov.uk/ieListDocuments.aspx?CId={cid}&MId={mid}'
+for mid,cid in [(8402,172),(8405,327),(8249,519),(8178,650),(8403,172),(8320,171)]: urls[f's_{mid}']=f'https://moderngov.southwark.gov.uk/ieListDocuments.aspx?CId={cid}&MId={mid}'
+for name,u in urls.items():
+ try:
+  r=s.get(u,timeout=30)
+  open(f'out/pages/{name}.html','wb').write(r.content)
+  open(f'out/pages/{name}.url','w').write(r.url)
+  print(name,r.status_code,len(r.content),r.url)
+ except Exception as e: print(name,e)
