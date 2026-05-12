@@ -31,7 +31,7 @@ urls={
 s=requests.Session()
 for n,u in urls.items():
  try:
-  r=s.get(u,timeout=45); print(n,r.status_code,len(r.content),r.url)
+  r=s.get(u,timeout=45); print(n,r.status_code,len(r.content),r.url); open(f'out/text/{n}.meta','w').write(str(r.status_code)+' '+r.url+' '+str(len(r.content))+' '+r.headers.get('Content-Type','')+'\n'+r.text[:200])
   open('/tmp/x.pdf','wb').write(r.content)
   pdf=PdfReader(io.BytesIO(r.content)); open(f'out/text/{n}.txt','w').write('\n\n'.join((p.extract_text() or '') for p in pdf.pages))
   open(f'out/text/{n}.url','w').write(r.url)
