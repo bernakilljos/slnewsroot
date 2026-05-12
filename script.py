@@ -29,6 +29,11 @@ urls={
 's_shrimp':bases+'documents/s130955/Report%20Licensing%20Act%202003%20Shrimp%20and%20Wings%20127%20Queens%20Road%20London%20SE15%202ND.pdf',
 }
 s=requests.Session()
+s.headers.update({'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36','Referer':'https://moderngov.southwark.gov.uk/ieListDocuments.aspx?CId=519&MId=8249','Accept':'text/html,application/pdf,*/*'})
+# seed cookies
+for pre in ['https://moderngov.southwark.gov.uk/ieListDocuments.aspx?CId=519&MId=8249','http://moderngov.southwark.gov.uk/ieListDocuments.aspx?CId=519&MId=8249']:
+ try: s.get(pre,timeout=20)
+ except: pass
 for n,u in urls.items():
  try:
   r=s.get(u,timeout=45); print(n,r.status_code,len(r.content),r.url); open(f'out/text/{n}.meta','w').write(str(r.status_code)+' '+r.url+' '+str(len(r.content))+' '+r.headers.get('Content-Type','')+'\n'+r.text[:200])
