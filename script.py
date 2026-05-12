@@ -7,7 +7,7 @@ s=requests.Session()
 for hi,h in enumerate(hosts):
  for pi,p in enumerate(paths):
   try:
-   r=s.get(h+p,timeout=40)
+   r=s.get(h+p,timeout=8)
    fn=f'out/{hi}_{pi}.txt';open(fn,'wb').write((f'URL={r.url}\nSTATUS={r.status_code}\n'.encode()+r.content))
    print(fn,r.status_code,len(r.content),r.url)
   except Exception as e: open(f'out/{hi}_{pi}.txt','w').write(str(e));print(e)
