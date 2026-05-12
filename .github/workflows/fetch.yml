@@ -1,0 +1,11 @@
+name: fetch
+on: [push, workflow_dispatch]
+jobs:
+  go:
+    runs-on: ubuntu-latest
+    permissions: {contents: write}
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install requests beautifulsoup4
+      - run: python script.py
+      - run: git config user.email x@y; git config user.name x; git add out; git commit -m out || true; git push
