@@ -1,0 +1,5 @@
+URL=https://democracy.wandsworth.gov.uk/robots.txt
+STATUS=200
+# Disallow all webbot searching 
+User-agent: *
+Disallow: /

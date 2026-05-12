@@ -1,0 +1,9 @@
+URL=https://moderngov.lambeth.gov.uk/robots.txt
+STATUS=200
+# Disallow all webbot searching BUT allow Google access to mgRss for calendar sync.
+User-agent: *
+DisAllow: /
+
+User-agent: Googlebot
+DisAllow: /
+Allow: /mgRss.aspx
